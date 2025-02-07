@@ -1,11 +1,14 @@
 import React from 'react';
-import './upbar.css';
+import './Components.css';
 
-const Upbar = () => {
+const navbar = () => {
   return (
     <div className="upbar">
       <div className="upbar-left">
-        <img src="/icons/gdg logo.svg" alt="GDG Logo" className="logo" />
+        <img src="/icons/gdg logo.svg" alt="" style={{
+             height: '50px',
+             width: '50px'
+        }} />
       </div>
       
       <div className="upbar-center">
@@ -38,4 +41,4 @@ const Upbar = () => {
   );
 };
 
-export default Upbar;
+export default navbar;

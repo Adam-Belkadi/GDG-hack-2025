@@ -1,5 +1,5 @@
 import React from "react";
-import "./Category.css";
+import './Components.css';
 
 const Button = ({ category, onClick }) => {
   return (
