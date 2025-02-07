@@ -1,7 +1,6 @@
 from rest_framework import serializers
-from .models import User, Community, UserCommunity, Post, Tag, PostTag, Event, EventTag, UserEvent, Opportunity, \
+from .models import Community, UserCommunity, CommunityTag, Post, Tag, PostTag, Event, EventTag, UserEvent, Opportunity, \
     OpportunityTag
-
 
 
 class CommunitySerializer(serializers.ModelSerializer):
@@ -26,6 +25,14 @@ class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
         fields = '__all__'
+
+
+class CommunityTagSerializer(serializers.ModelSerializer):
+    tag = TagSerializer(source='tagId', read_only=True)
+
+    class Meta:
+        model = CommunityTag
+        fields = ['communityId', 'tag']
 
 
 class PostTagSerializer(serializers.ModelSerializer):

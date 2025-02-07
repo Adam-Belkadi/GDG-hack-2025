@@ -1,9 +1,11 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
+from rest_framework import status
 from .models import (
     Community,
     UserCommunity,
+    CommunityTag,
     Post,
     Tag,
     PostTag,
@@ -14,7 +16,6 @@ from .models import (
     OpportunityTag,
 )
 from .serializers import (
-    UserSerializer,
     CommunitySerializer,
     UserCommunitySerializer,
     PostSerializer,
@@ -25,7 +26,6 @@ from .serializers import (
     UserEventSerializer,
     OpportunitySerializer,
     OpportunityTagSerializer,
-    GlobalEventSerializer,
 )
 
 
@@ -34,7 +34,7 @@ from .serializers import (
 def get_communities(request):
     communities = Community.objects.all()
     serializer = CommunitySerializer(communities, many=True)
-    return Response(serializer.data)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])
@@ -43,12 +43,70 @@ def get_user_enrolled_communities(request):
     user = request.user
     communities = user.community_set.all()
     serializer = UserCommunitySerializer(communities, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_community_posts(request, community_id):
+    user = request.user
+    try:
+        community = user.community_set.get(id=community_id)
+        posts = Post.objects.filter(communityId=community)
+        serializer = PostSerializer(posts, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except Community.DoesNotExist:
+        return Response({"error": "Community not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_community(request, community_id):
+    user = request.user
+    community = user.community_set.get(id=community_id)
+    serializer = CommunitySerializer(community)
     return Response(serializer.data)
 
 
-def get_community_posts(request):
-    queryset = Post.objects.all()
-    serializer_class = PostSerializer
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_community_tags(request, community_id):
+    user = request.user
+    try:
+        community = user.community_set.get(id=community_id)
+        community_tags = CommunityTag.objects.filter(communityId=community).select_related('tagId')
+        tags = [ct.tagId for ct in community_tags]
+        serializer = TagSerializer(tags, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    except Community.DoesNotExist:
+        return Response({"error": "Community not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['GET'])
+def search_communities(request):
+    tag_name = request.GET.get('tag', None)  # Example: ?tag=Blockchain
+    search_query = request.GET.get('name', None)  # Example: ?name=Tech
+    communities = Community.objects.all()
+    if tag_name:
+        try:
+            tag = Tag.objects.get(name__iexact=tag_name)  # Case-insensitive match
+            community_ids = CommunityTag.objects.filter(tagId=tag).values_list('communityId', flat=True)
+            communities = communities.filter(id__in=community_ids)
+        except Tag.DoesNotExist:
+            return Response({"message": "No communities found for this tag"}, status=status.HTTP_200_OK)
+    if search_query:
+        communities = communities.filter(title__icontains=search_query)  # Case-insensitive partial match
+    serializer = CommunitySerializer(communities, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_all_tags(request):
+    tags = Tag.objects.all()
+    serializer = TagSerializer(tags, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class TagViewSet(viewsets.ModelViewSet):

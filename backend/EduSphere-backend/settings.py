@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     'community',
     'authentication',
+    'the_wall',
 
     'rest_framework',
     'corsheaders',

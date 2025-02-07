@@ -2,6 +2,13 @@ from django.db import models
 from authentication.models import User
 
 
+class Tag(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+
+    def __str__(self):
+        return self.name
+
+
 class Community(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField()
@@ -33,6 +40,18 @@ class UserCommunity(models.Model):
         return f"{self.userId.email} - {self.communityId.title}"
 
 
+class CommunityTag(models.Model):
+    communityId = models.ForeignKey(Community, on_delete=models.CASCADE)
+    tagId = models.ForeignKey(Tag, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('communityId', 'tagId')
+
+    def __str__(self):
+        return f"{self.communityId.title} - {self.tagId.name}"
+
+
+
 class Post(models.Model):
     POST_TYPE_CHOICES = [
         ('Solution', 'Solution'),
@@ -46,16 +65,11 @@ class Post(models.Model):
     communityId = models.ForeignKey(Community, on_delete=models.CASCADE, related_name='posts')
     type = models.CharField(max_length=20, choices=POST_TYPE_CHOICES)
     createdAt = models.DateTimeField(auto_now_add=True)
+    average_stars = models.FloatField(default=0)
+    total_ratings = models.IntegerField(default=0)
 
     def __str__(self):
         return f"Post by {self.authorId.email} in {self.communityId.title}"
-
-
-class Tag(models.Model):
-    name = models.CharField(max_length=50, unique=True)
-
-    def __str__(self):
-        return self.name
 
 
 class PostTag(models.Model):

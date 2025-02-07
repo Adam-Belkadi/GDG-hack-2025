@@ -1,36 +1,33 @@
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
+from django.urls import path
 from .views import (
-    UserViewSet,
-    CommunityViewSet,
-    UserCommunityViewSet,
-    PostViewSet,
-    TagViewSet,
-    PostTagViewSet,
-    EventViewSet,
-    EventTagViewSet,
-    UserEventViewSet,
-    OpportunityViewSet,
-    OpportunityTagViewSet,
-    GlobalEventViewSet,
+    get_communities,
+    get_user_enrolled_communities,
+    get_community_posts,
+    get_community,
+    get_community_tags,
+    search_communities,
+    get_all_tags,
 )
 
-# Create a router and register the viewsets
-router = DefaultRouter()
-router.register(r'users', UserViewSet)
-router.register(r'communities', CommunityViewSet)
-router.register(r'user-communities', UserCommunityViewSet)
-router.register(r'posts', PostViewSet)
-router.register(r'tags', TagViewSet)
-router.register(r'post-tags', PostTagViewSet)
-router.register(r'events', EventViewSet)
-router.register(r'event-tags', EventTagViewSet)
-router.register(r'user-events', UserEventViewSet)
-router.register(r'opportunities', OpportunityViewSet)
-router.register(r'opportunity-tags', OpportunityTagViewSet)
-router.register(r'global-events', GlobalEventViewSet)
-
 urlpatterns = [
-    # Include the router's URLs
-    path('', include(router.urls)),
+    # Get all communities
+    path('communities/', get_communities, name='get-communities'),
+
+    # Get communities the user is enrolled in
+    path('communities/enrolled/', get_user_enrolled_communities, name='get-user-enrolled-communities'),
+
+    # Get a single community by ID
+    path('community/<int:community_id>/', get_community, name='get-community'),
+
+    # Get all posts of a community
+    path('community/<int:community_id>/posts/', get_community_posts, name='get-community-posts'),
+
+    # Get all tags of a community
+    path('community/<int:community_id>/tags/', get_community_tags, name='get-community-tags'),
+
+    # Search communities by tag or name
+    path('communities/search/', search_communities, name='search-communities'),
+
+    # Get all tags
+    path('tags/', get_all_tags, name='get-all-tags'),
 ]
