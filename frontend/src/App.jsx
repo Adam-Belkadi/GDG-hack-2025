@@ -20,11 +20,11 @@ function App() {
           <Route path="Auth/LogIn" element={<LogInPage />} />
           <Route path="Auth/SignUp" element={<SignUp />} />
           <Route path="Events" element={<Events />} />
-          <Route path='Communties' element={<Communities></Communities>}></Route>
+          <Route path='Communities' element={<Communities></Communities>}></Route>
           <Route path='Ranking' element={<Ranking></Ranking>}></Route>
-          <Route path="Communities/:id/Posts" element={<PostsInC />} /> 
-          <Route path="Communities/:id/Events" element={<EventsInC />} /> 
-          <Route path="Communities/:id/Ranking" element={<RankingInC />} /> 
+          <Route path="Communities/:communityId/Posts" element={<PostsInC />} /> 
+          <Route path="Communities/:communityId/Events" element={<EventsInC />} /> 
+          <Route path="Communities/:communityId/Ranking" element={<RankingInC />} /> 
 
         </Route>
       </Routes>
