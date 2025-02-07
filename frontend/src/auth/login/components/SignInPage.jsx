@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import './SignInPage.css';
 
 const SignInPage = () => {
   const [formData, setFormData] = useState({
     email: '',
-    phoneNumber: '',
     password: '',
     rememberMe: false
   });
 
   const [errors, setErrors] = useState({
     email: false,
-    phoneNumber: false,
     password: false
   });
 
@@ -69,23 +68,11 @@ const SignInPage = () => {
           </div>
 
           <div className="form-group">
-            <label className="form-label">Phone number</label>
-            <input
-              type="tel"
-              name="phoneNumber"
-              placeholder="US XXXXXXXX"
-              className="form-input"
-              value={formData.phoneNumber}
-              onChange={handleChange}
-            />
-            {errors.phoneNumber && <p className="error-text">Phone number not found</p>}
-          </div>
-
-          <div className="form-group">
             <label className="form-label">Password</label>
             <input
               type="password"
               name="password"
+              placeholder="••••••••"
               className="form-input"
               value={formData.password}
               onChange={handleChange}
@@ -127,7 +114,7 @@ const SignInPage = () => {
         </div>
 
         <div className="signup-link">
-          Don't have an account? <a href="#">Sign up</a>
+          Don't have an account? <Link to="/signup">Sign up</Link>
         </div>
       </div>
     </div>

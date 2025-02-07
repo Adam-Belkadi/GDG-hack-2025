@@ -1,0 +1,82 @@
+/* General card container */
+.card-container {
+    width: 420px;
+    height: 418px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Media section */
+.card-media {
+    height: 200px;
+    position: relative;
+    background: url('/icons/bigcat.svg') no-repeat center center;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.big-cat {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.small-cat {
+    width: 60px;
+    height: 60px;
+    position: absolute;
+    bottom: -70px;
+    left: 20px;
+    border-radius: 50%;
+    border: 2px solid white;
+}
+
+/* Content section */
+.card-content {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1F2937;
+    margin: 0;
+}
+
+.card-description {
+    font-size: 0.875rem;
+    color: #6B7280;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+}
+
+.card-members {
+    font-size: 1rem;
+    color: #374151;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+}
+
+.members-highlight {
+    color: #10B981;
+    margin-left: 5px;
+    font-weight: bold;
+}
+
+
