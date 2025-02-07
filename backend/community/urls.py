@@ -9,6 +9,7 @@ from .views import (
     get_all_tags,
     get_community_events,
     get_community_events_by_tag,
+    get_ranked_users,
 )
 
 urlpatterns = [
@@ -38,4 +39,7 @@ urlpatterns = [
 
     # Get all events of a community with a special tag
     path('communities/<uuid:community_id>/events/filter/', get_community_events_by_tag, name='get-community-events-by-tag'),
+
+    # Get ranked members in a community
+    path('communities/<uuid:community_id>/users/ordered/', get_ranked_users, name='get-raked-members'),
 ]

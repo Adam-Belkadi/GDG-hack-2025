@@ -142,6 +142,17 @@ def get_community_events_by_tag(request, community_id):
         return Response({"error": "Community not found"}, status=status.HTTP_404_NOT_FOUND)
 
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_ranked_users(request, community_id):
+    try:
+        community = Community.objects.get(id=community_id)
+        enrolled_users = UserCommunity.objects.filter(communityId=community).order_by('-exp')  # Descending order
+        serializer = UserCommunitySerializer(enrolled_users, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except Community.DoesNotExist:
+        return Response({"error": "Community not found"}, status=status.HTTP_404_NOT_FOUND)
+
 class TagViewSet(viewsets.ModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
