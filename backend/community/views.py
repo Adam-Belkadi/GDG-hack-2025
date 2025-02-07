@@ -109,6 +109,39 @@ def get_all_tags(request):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_community_events(request, community_id):
+    user = request.user
+    try:
+        community = user.community_set.get(id=community_id)
+        events = Event.objects.filter(communityId=community)
+        serializer = EventSerializer(events, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except Community.DoesNotExist:
+        return Response({"error": "Community not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_community_events_by_tag(request, community_id):
+    tag_name = request.GET.get('tag', None)
+    try:
+        community = Community.objects.get(id=community_id)
+        events = Event.objects.filter(communityId=community)
+        if tag_name:
+            try:
+                tag = Tag.objects.get(name__iexact=tag_name)  # Case-insensitive search
+                event_ids = EventTag.objects.filter(tagId=tag).values_list('eventId', flat=True)
+                events = events.filter(id__in=event_ids)
+            except Tag.DoesNotExist:
+                return Response({"message": "No events found for this tag"}, status=status.HTTP_200_OK)
+        serializer = EventSerializer(events, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except Community.DoesNotExist:
+        return Response({"error": "Community not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
 class TagViewSet(viewsets.ModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
