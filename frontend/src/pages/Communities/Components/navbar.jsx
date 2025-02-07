@@ -1,7 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Components.css';
+import NotificationMenu from './Notificationbar';
 
-const navbar = () => {
+const Navbar = () => {
+  const [showNotifications, setShowNotifications] = useState(false);
+
+  const toggleNotifications = () => {
+    setShowNotifications(!showNotifications);
+  };
+
   return (
     <div className="upbar">
       <div className="upbar-left">
@@ -23,9 +30,22 @@ const navbar = () => {
       </div>
       
       <div className="upbar-right">
-        <button className="notification-btn">
-          <img src="/icons/Notification.svg" alt="Notifications" className="notification-icon" />
-        </button>
+        <div className="relative">
+          <button 
+            className="notification-btn"
+            onClick={toggleNotifications}
+          >
+            <img src="/icons/Notification.svg" alt="Notifications" className="notification-icon" />
+          </button>
+          
+          {/* Notification Menu */}
+          {showNotifications && (
+            <div className="absolute right-0 mt-2 z-50">
+              <NotificationMenu />
+            </div>
+          )}
+        </div>
+        
         <div className="profile-avatar">
           <img 
             src="https://ui-avatars.com/api/?name=John+Doe" 
@@ -41,4 +61,4 @@ const navbar = () => {
   );
 };
 
-export default navbar;
+export default Navbar;
