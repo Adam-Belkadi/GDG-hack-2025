@@ -1,6 +1,5 @@
 from rest_framework import serializers
-from .models import Community, UserCommunity, CommunityTag, Post, Tag, PostTag, Event, EventTag, UserEvent, Opportunity, \
-    OpportunityTag
+from .models import Community, UserCommunity, CommunityTag, Post, Tag, PostTag, Event, EventTag, UserEvent, UserStarredPost, UserStarredEvent
 
 
 class CommunitySerializer(serializers.ModelSerializer):
@@ -59,15 +58,17 @@ class UserEventSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class OpportunitySerializer(serializers.ModelSerializer):
+class StarPostSerializer(serializers.ModelSerializer):
+    stars = serializers.IntegerField(min_value=1, max_value=5)
+
     class Meta:
-        model = Opportunity
-        fields = '__all__'
+        model = UserStarredPost
+        fields = ['stars']
 
 
-class OpportunityTagSerializer(serializers.ModelSerializer):
+class StarEventSerializer(serializers.ModelSerializer):
+    stars = serializers.IntegerField(min_value=1, max_value=5)
+
     class Meta:
-        model = OpportunityTag
-        fields = '__all__'
-
-
+        model = UserStarredEvent
+        fields = ['stars']

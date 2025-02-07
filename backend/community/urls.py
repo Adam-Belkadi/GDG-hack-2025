@@ -13,11 +13,17 @@ from .views import (
     get_post_tags,
     create_community,
     create_post,
+    star_post,
+    star_event,
+    delete_post,
+    delete_community, enroll_user_to_community,
 )
 
 urlpatterns = [
     # Get all communities
     path('communities/', get_communities, name='get-communities'),
+
+    path('community/enroll/<int:community_id>/', enroll_user_to_community, name='enroll_user'),
 
     # Get communities the user is enrolled in
     path('communities/enrolled/', get_user_enrolled_communities, name='get-user-enrolled-communities'),
@@ -53,5 +59,17 @@ urlpatterns = [
     path('communities/create/', create_community, name='create-community'),
 
     # Create a post
-    path('communities/<uuid:community_id>/posts/create/', create_post, name='create-post'),
+    path('communities/<int:community_id>/posts/create/', create_post, name='create-post'),
+
+    # Star a post and save it
+    path('communities/<int:community_id>/posts/<int:post_id>/star/', star_post, name='star-post'),
+
+    # Star an event and save it
+    path('communities/<int:community_id>/events/<int:event_id>/star/', star_event, name='star-event'),
+
+    # Delete community
+    path('communities/<int:community_id>/delete/', delete_community, name='delete-community'),
+
+    # Delete post
+    path('communities/<int:community_id>/posts/<int:post_id>/delete/', delete_post, name='delete-post'),
 ]

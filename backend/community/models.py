@@ -51,7 +51,6 @@ class CommunityTag(models.Model):
         return f"{self.communityId.title} - {self.tagId.name}"
 
 
-
 class Post(models.Model):
     POST_TYPE_CHOICES = [
         ('Solution', 'Solution'),
@@ -70,6 +69,18 @@ class Post(models.Model):
 
     def __str__(self):
         return f"Post by {self.authorId.email} in {self.communityId.title}"
+
+
+class UserStarredPost(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='starred_by')
+    stars = models.PositiveIntegerField(default=1)  # Rating from 1 to 5
+
+    class Meta:
+        unique_together = ('user', 'post')  # Prevent duplicate ratings
+
+    def __str__(self):
+        return f"{self.user.email} starred {self.post.id} with {self.stars} stars"
 
 
 class PostTag(models.Model):
@@ -91,9 +102,12 @@ class Event(models.Model):
     isOnline = models.BooleanField(default=False)
     organizerId = models.ForeignKey(User, on_delete=models.CASCADE, related_name='organized_events')
     communityId = models.ForeignKey(Community, on_delete=models.CASCADE, related_name='events')
+    average_stars = models.FloatField(default=0)
+    total_ratings = models.IntegerField(default=0)
 
     def __str__(self):
         return self.title
+
 
 
 class EventTag(models.Model):
@@ -125,31 +139,13 @@ class UserEvent(models.Model):
         return f"{self.userId.email} - {self.eventId.title}"
 
 
-class Opportunity(models.Model):
-    OPPORTUNITY_TYPE_CHOICES = [
-        ('Job', 'Job'),
-        ('Internship', 'Internship'),
-        ('Collaboration', 'Collaboration'),
-    ]
-
-    title = models.CharField(max_length=200)
-    description = models.TextField()
-    type = models.CharField(max_length=20, choices=OPPORTUNITY_TYPE_CHOICES)
-    postedBy = models.ForeignKey(User, on_delete=models.CASCADE, related_name='opportunities')
-    communityId = models.ForeignKey(Community, on_delete=models.CASCADE, related_name='opportunities')
-    createdAt = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.title
-
-
-class OpportunityTag(models.Model):
-    opportunityId = models.ForeignKey(Opportunity, on_delete=models.CASCADE)
-    tagId = models.ForeignKey(Tag, on_delete=models.CASCADE)
-
+class UserStarredEvent(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='starred_by')
+    stars = models.PositiveIntegerField(default=1)
+    starred_at = models.DateTimeField(auto_now_add=True)
     class Meta:
-        unique_together = ('opportunityId', 'tagId')
+        unique_together = ('user', 'event')
 
     def __str__(self):
-        return f"{self.opportunityId.title} - {self.tagId.name}"
-
+        return f"{self.user.email} starred {self.event.title} with {self.stars} stars"

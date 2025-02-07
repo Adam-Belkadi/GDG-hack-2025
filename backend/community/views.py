@@ -1,6 +1,8 @@
+from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
+from django.db import transaction
 from rest_framework import status
 from .models import (
     Community,
@@ -12,8 +14,8 @@ from .models import (
     Event,
     EventTag,
     UserEvent,
-    Opportunity,
-    OpportunityTag,
+    UserStarredPost,
+    UserStarredEvent,
 )
 from .serializers import (
     CommunitySerializer,
@@ -24,8 +26,7 @@ from .serializers import (
     EventSerializer,
     EventTagSerializer,
     UserEventSerializer,
-    OpportunitySerializer,
-    OpportunityTagSerializer,
+    StarPostSerializer,
 )
 
 
@@ -44,6 +45,21 @@ def get_user_enrolled_communities(request):
     communities = user.usercommunity_set.all()
     serializer = UserCommunitySerializer(communities, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def enroll_user_to_community(request, community_id):
+    user = request.user
+
+    community = get_object_or_404(Community, id=community_id)
+
+    if UserCommunity.objects.filter(userId=user, communityId=community).exists():
+        return Response({"message": "User is already a member of this community"}, status=status.HTTP_400_BAD_REQUEST)
+
+    UserCommunity.objects.create(userId=user, communityId=community, role='Member')
+
+    return Response({"message": "User successfully enrolled in the community"}, status=status.HTTP_201_CREATED)
 
 
 @api_view(['GET'])
@@ -177,10 +193,21 @@ def create_community(request):
     user = request.user
     data = request.data.copy()
     data['ownerId'] = user.id
+
     serializer = CommunitySerializer(data=data)
+
     if serializer.is_valid():
-        serializer.save(ownerId=user)
+        with transaction.atomic():
+            community = serializer.save(ownerId=user)
+
+            UserCommunity.objects.create(
+                userId=user,
+                communityId=community,
+                role='Admin'
+            )
+
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -203,3 +230,98 @@ def create_post(request, community_id):
         serializer.save(authorId=user, communityId=community)  # Save post with author and community
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def star_post(request, community_id, post_id):
+    user = request.user
+    try:
+        post = Post.objects.get(id=post_id, communityId=community_id)
+    except Post.DoesNotExist:
+        return Response({"error": "Post not found in this community"}, status=status.HTTP_404_NOT_FOUND)
+    if UserStarredPost.objects.filter(user=user, post=post).exists():
+        return Response({"error": "You have already starred this post"}, status=status.HTTP_400_BAD_REQUEST)
+    stars = request.data.get("stars")
+    if not stars or not (1 <= int(stars) <= 5):
+        return Response({"error": "Invalid star rating. Must be between 1 and 5."}, status=status.HTTP_400_BAD_REQUEST)
+
+    UserStarredPost.objects.create(user=user, post=post, stars=stars)
+
+    total_ratings = post.total_ratings + 1
+    average_stars = post.average_stars + request.data.get("stars") / total_ratings
+
+    post.total_ratings = total_ratings
+    post.average_stars = average_stars
+    post.save()
+
+    post.authorId.exp += (int(stars) - 1) * 10
+    post.authorId.save()
+
+    return Response({
+        "message": "Post starred successfully",
+        "average_stars": average_stars,
+        "total_ratings": total_ratings,
+        "exp_awarded": (int(stars) - 1) * 10
+    }, status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def star_event(request, community_id, event_id):
+    """Allow a user to star an event, preventing multiple ratings"""
+    user = request.user
+    try:
+        event = Event.objects.get(id=event_id, communityId=community_id)
+    except Event.DoesNotExist:
+        return Response({"error": "Event not found in this community"}, status=status.HTTP_404_NOT_FOUND)
+    if UserStarredEvent.objects.filter(user=user, event=event).exists():
+        return Response({"error": "You have already starred this event"}, status=status.HTTP_400_BAD_REQUEST)
+    stars = request.data.get("stars")
+    if not stars or not (1 <= int(stars) <= 5):
+        return Response({"error": "Invalid star rating. Must be between 1 and 5."}, status=status.HTTP_400_BAD_REQUEST)
+
+    UserStarredEvent.objects.create(user=user, event=event, stars=stars)
+
+    total_ratings = event.total_ratings + 1
+    average_stars = event.average_stars + event.average_stars / total_ratings
+
+    event.total_ratings = total_ratings
+    event.average_stars = average_stars
+    event.save()
+
+    return Response({
+        "message": "Event starred successfully",
+        "average_stars": average_stars,
+        "total_ratings": total_ratings
+    }, status=status.HTTP_200_OK)
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_community(request, community_id):
+    user = request.user
+    try:
+        community = Community.objects.get(id=community_id)
+        if community.ownerId != user:
+            return Response({"error": "You are not the owner of this community"}, status=status.HTTP_403_FORBIDDEN)
+    except Community.DoesNotExist:
+        return Response({"error": "Community not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    community.delete()
+    return Response({"message": "Community deleted successfully"}, status=status.HTTP_200_OK)
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_post(request, community_id, post_id):
+    user = request.user
+    try:
+        post = Post.objects.get(id=post_id, communityId=community_id)
+    except Post.DoesNotExist:
+        return Response({"error": "Post not found"}, status=status.HTTP_404_NOT_FOUND)
+    if post.authorId != user and post.communityId.ownerId != user:
+        return Response({"error": "You are not allowed to delete this post"}, status=status.HTTP_403_FORBIDDEN)
+
+    post.delete()
+    return Response({"message": "Post deleted successfully"}, status=status.HTTP_200_OK)
