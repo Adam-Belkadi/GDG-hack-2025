@@ -1,12 +1,7 @@
 from rest_framework import serializers
 from .models import User, Community, UserCommunity, Post, Tag, PostTag, Event, EventTag, UserEvent, Opportunity, \
-    OpportunityTag, GlobalEvent
+    OpportunityTag
 
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = '__all__'
 
 
 class CommunitySerializer(serializers.ModelSerializer):
@@ -69,7 +64,3 @@ class OpportunityTagSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class GlobalEventSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = GlobalEvent
-        fields = '__all__'

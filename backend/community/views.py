@@ -1,8 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticated
 from .models import (
-    User,
     Community,
     UserCommunity,
     Post,
@@ -13,7 +12,6 @@ from .models import (
     UserEvent,
     Opportunity,
     OpportunityTag,
-    GlobalEvent,
 )
 from .serializers import (
     UserSerializer,
@@ -34,16 +32,21 @@ from .serializers import (
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_communities(request):
-    queryset = Community.objects.all()
-    serializer_class = CommunitySerializer
+    communities = Community.objects.all()
+    serializer = CommunitySerializer(communities, many=True)
+    return Response(serializer.data)
 
 
-class UserCommunityViewSet(viewsets.ModelViewSet):
-    queryset = UserCommunity.objects.all()
-    serializer_class = UserCommunitySerializer
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_user_enrolled_communities(request):
+    user = request.user
+    communities = user.community_set.all()
+    serializer = UserCommunitySerializer(communities, many=True)
+    return Response(serializer.data)
 
 
-class PostViewSet(viewsets.ModelViewSet):
+def get_community_posts(request):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
