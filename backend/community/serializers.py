@@ -6,7 +6,7 @@ from .models import Community, UserCommunity, CommunityTag, Post, Tag, PostTag, 
 class CommunitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Community
-        fields = '__all__'
+        fields = ['id', 'title', 'description', 'rules', 'createdAt']
 
 
 class UserCommunitySerializer(serializers.ModelSerializer):
@@ -18,7 +18,7 @@ class UserCommunitySerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
-        fields = '__all__'
+        fields = ['id', 'content', 'type', 'createdAt']
 
 
 class TagSerializer(serializers.ModelSerializer):

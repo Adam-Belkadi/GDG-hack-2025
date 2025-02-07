@@ -41,7 +41,7 @@ def get_communities(request):
 @permission_classes([IsAuthenticated])
 def get_user_enrolled_communities(request):
     user = request.user
-    communities = user.community_set.all()
+    communities = user.usercommunity_set.all()
     serializer = UserCommunitySerializer(communities, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -51,7 +51,7 @@ def get_user_enrolled_communities(request):
 def get_community_posts(request, community_id):
     user = request.user
     try:
-        community = user.community_set.get(id=community_id)
+        community = user.usercommunity_set.get(id=community_id)
         posts = Post.objects.filter(communityId=community)
         serializer = PostSerializer(posts, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -63,7 +63,7 @@ def get_community_posts(request, community_id):
 @permission_classes([IsAuthenticated])
 def get_community(request, community_id):
     user = request.user
-    community = user.community_set.get(id=community_id)
+    community = user.usercommunity_set.get(id=community_id)
     serializer = CommunitySerializer(community)
     return Response(serializer.data)
 
@@ -73,7 +73,7 @@ def get_community(request, community_id):
 def get_community_tags(request, community_id):
     user = request.user
     try:
-        community = user.community_set.get(id=community_id)
+        community = user.usercommunity_set.get(id=community_id)
         community_tags = CommunityTag.objects.filter(communityId=community).select_related('tagId')
         tags = [ct.tagId for ct in community_tags]
         serializer = TagSerializer(tags, many=True)
@@ -114,7 +114,7 @@ def get_all_tags(request):
 def get_community_events(request, community_id):
     user = request.user
     try:
-        community = user.community_set.get(id=community_id)
+        community = user.usercommunity_set.get(id=community_id)
         events = Event.objects.filter(communityId=community)
         serializer = EventSerializer(events, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -153,41 +153,32 @@ def get_ranked_users(request, community_id):
     except Community.DoesNotExist:
         return Response({"error": "Community not found"}, status=status.HTTP_404_NOT_FOUND)
 
-class TagViewSet(viewsets.ModelViewSet):
-    queryset = Tag.objects.all()
-    serializer_class = TagSerializer
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_post_tags(request, community_id, post_id):
+    user = request.user
+    try:
+        community = user.usercommunity_set.get(communityId=community_id)
+        post = Post.objects.get(id=post_id, communityId=community.communityId)
+        post_tags = PostTag.objects.filter(postId=post).select_related('tagId')
+        tags = [pt.tagId for pt in post_tags]
+        serializer = TagSerializer(tags, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except UserCommunity.DoesNotExist:
+        return Response({"error": "You are not a member of this community"}, status=status.HTTP_403_FORBIDDEN)
+    except Post.DoesNotExist:
+        return Response({"error": "Post not found in this community"}, status=status.HTTP_404_NOT_FOUND)
 
 
-class PostTagViewSet(viewsets.ModelViewSet):
-    queryset = PostTag.objects.all()
-    serializer_class = PostTagSerializer
-
-
-class EventViewSet(viewsets.ModelViewSet):
-    queryset = Event.objects.all()
-    serializer_class = EventSerializer
-
-
-class EventTagViewSet(viewsets.ModelViewSet):
-    queryset = EventTag.objects.all()
-    serializer_class = EventTagSerializer
-
-
-class UserEventViewSet(viewsets.ModelViewSet):
-    queryset = UserEvent.objects.all()
-    serializer_class = UserEventSerializer
-
-
-class OpportunityViewSet(viewsets.ModelViewSet):
-    queryset = Opportunity.objects.all()
-    serializer_class = OpportunitySerializer
-
-
-class OpportunityTagViewSet(viewsets.ModelViewSet):
-    queryset = OpportunityTag.objects.all()
-    serializer_class = OpportunityTagSerializer
-
-
-class GlobalEventViewSet(viewsets.ModelViewSet):
-    queryset = GlobalEvent.objects.all()
-    serializer_class = GlobalEventSerializer
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def create_community(request):
+    user = request.user
+    data = request.data.copy()
+    data['ownerId'] = user.id
+    serializer = CommunitySerializer(data=data)
+    if serializer.is_valid():
+        serializer.save(ownerId=user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

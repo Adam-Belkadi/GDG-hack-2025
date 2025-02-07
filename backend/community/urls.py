@@ -10,6 +10,8 @@ from .views import (
     get_community_events,
     get_community_events_by_tag,
     get_ranked_users,
+    get_post_tags,
+    create_community,
 )
 
 urlpatterns = [
@@ -38,8 +40,14 @@ urlpatterns = [
     path('communities/<int:community_id>/events/', get_community_events, name='get-community-events'),
 
     # Get all events of a community with a special tag
-    path('communities/<uuid:community_id>/events/filter/', get_community_events_by_tag, name='get-community-events-by-tag'),
+    path('communities/<int:community_id>/events/filter/', get_community_events_by_tag, name='get-community-events-by-tag'),
 
     # Get ranked members in a community
-    path('communities/<uuid:community_id>/users/ordered/', get_ranked_users, name='get-raked-members'),
+    path('communities/<int:community_id>/members/ordered/', get_ranked_users, name='get-raked-members'),
+
+    # Get all tags of a post
+    path('communities/<int:community_id>/posts/<int:post_id>/tags/', get_post_tags, name='get-post-tags'),
+
+    # Create a community
+    path('communities/create/', create_community, name='create-community'),
 ]
