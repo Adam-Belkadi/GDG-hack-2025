@@ -182,3 +182,24 @@ def create_community(request):
         serializer.save(ownerId=user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def create_post(request, community_id):
+    user = request.user
+    try:
+        community = Community.objects.get(id=community_id)
+        user_community = UserCommunity.objects.get(userId=user, communityId=community)
+    except Community.DoesNotExist:
+        return Response({"error": "Community not found"}, status=status.HTTP_404_NOT_FOUND)
+    except UserCommunity.DoesNotExist:
+        return Response({"error": "You are not a member of this community"}, status=status.HTTP_403_FORBIDDEN)
+    data = request.data.copy()
+    data['authorId'] = user.id
+    data['communityId'] = community.id
+    serializer = PostSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save(authorId=user, communityId=community)  # Save post with author and community
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

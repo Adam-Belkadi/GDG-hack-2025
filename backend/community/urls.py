@@ -12,6 +12,7 @@ from .views import (
     get_ranked_users,
     get_post_tags,
     create_community,
+    create_post,
 )
 
 urlpatterns = [
@@ -50,4 +51,7 @@ urlpatterns = [
 
     # Create a community
     path('communities/create/', create_community, name='create-community'),
+
+    # Create a post
+    path('communities/<uuid:community_id>/posts/create/', create_post, name='create-post'),
 ]
