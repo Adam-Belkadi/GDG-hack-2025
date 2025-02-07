@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import './SignInPage.css';
 
-const SignInPage = () => {
+const LogInPage = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -121,4 +120,4 @@ const SignInPage = () => {
   );
 };
 
-export default SignInPage;
+export default LogInPage;
