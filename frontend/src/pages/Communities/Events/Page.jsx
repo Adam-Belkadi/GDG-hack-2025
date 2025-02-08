@@ -1,4 +1,4 @@
-import { Route, useParams,useNavigate  } from "react-router-dom";
+import { Route, useParams, useNavigate } from "react-router-dom";
 import SideBar from "../Components/SideBar";
 import SectionButton from "../Components/SectionButton";
 import AddPost from "../Components/AddPost";
@@ -11,27 +11,32 @@ export default function PostsInC() {
   const eventList = [
     {
       eventName: "Web Development Conference 2025",
-      eventDescription: "A conference for web developers to learn about new trends and technologies.",
+      eventDescription:
+        "A conference for web developers to learn about new trends and technologies.",
       eventImageUrl: "/icons/bigcat1.svg",
     },
     {
       eventName: "AI & Machine Learning Summit",
-      eventDescription: "A summit focused on the future of AI and machine learning.",
+      eventDescription:
+        "A summit focused on the future of AI and machine learning.",
       eventImageUrl: "/icons/bigcat1.svg",
     },
     {
       eventName: "Cyber Security Awareness Week",
-      eventDescription: "A week dedicated to raising awareness about cybersecurity threats and defenses.",
+      eventDescription:
+        "A week dedicated to raising awareness about cybersecurity threats and defenses.",
       eventImageUrl: "/icons/bigcat1.svg",
     },
     {
       eventName: "Open Source Hackathon",
-      eventDescription: "A hackathon for developers to contribute to open source projects and collaborate.",
+      eventDescription:
+        "A hackathon for developers to contribute to open source projects and collaborate.",
       eventImageUrl: "/icons/bigcat1.svg",
     },
     {
       eventName: "Cloud Computing & DevOps Workshop",
-      eventDescription: "A workshop on cloud platforms, CI/CD, and DevOps practices.",
+      eventDescription:
+        "A workshop on cloud platforms, CI/CD, and DevOps practices.",
       eventImageUrl: "/icons/bigcat1.svg",
     },
   ];
@@ -52,7 +57,7 @@ export default function PostsInC() {
           ownerAvatar={"/icons/small cat.svg"}
         ></SideBar>
         <div className="postsContent">
-        <div className="sectionButtonContainer">
+          <div className="sectionButtonContainer">
             <SectionButton
               sectionName={"Posts"}
               onClick={() => {
@@ -73,19 +78,29 @@ export default function PostsInC() {
               }}
             />
           </div>
+              <div className="eventCommHead">
+              <div className="viewToggle">
+            <div className="viewToggleItem Clicked">
+              <img src="/icons/grid-view.svg" alt="icon view" />
+            </div>
+            <div className="viewToggleItem">
+              <img src="/icons/calendar.svg" alt="icon view" />
+            </div>
+          </div>
 
+
+              </div>
           <div className="postsContainer">
-          {eventList?.map((event, index) => (
-        <EventItem
-          key={index}
-          eventName={event.eventName}
-          eventDescription={event.eventDescription}
-          eventImageUrl={event.eventImageUrl}
-        />
-      ))}          </div>
-        
+            {eventList?.map((event, index) => (
+              <EventItem
+                key={index}
+                eventName={event.eventName}
+                eventDescription={event.eventDescription}
+                eventImageUrl={event.eventImageUrl}
+              />
+            ))}{" "}
+          </div>
         </div>
-        
       </div>
     </>
   );

@@ -32,8 +32,8 @@
 
   --border-light: 0.5px solid rgba(0, 0, 0, 0.13);
 
-  --border-shadow-normal: 0px, 4px, 4px, 0px rgba(0, 0, 0, 0.25);
-  --border-shadow-light: 0px, 1px, 5px, 0px rgba(0, 0, 0, 0.28);
+  --border-shadow-normal: 1px, 4px, 4px, 0px rgba(0, 0, 0, 0.684);
+  --border-shadow-light: 2px, 1px, 5px, 0px rgba(0, 0, 0, 0.28);
 }
 
 * {
@@ -596,7 +596,7 @@ main {
   color: var(--blue-color);
 }
 
-.communitiesSection .communitiesHeader .viewToggle{
+ .viewToggle{
   margin-top: 1rem;
   width: 13%;
   height: 25%;
@@ -609,7 +609,7 @@ main {
 
 }
 
-.communitiesSection .communitiesHeader .viewToggle .viewToggleItem:nth-child(1){
+ .viewToggle .viewToggleItem:nth-child(1){
   width: 48%;
   height: 100%;
   border-radius: 50px 0 0 50px;
@@ -621,7 +621,7 @@ main {
 
 }
 
-.communitiesSection .communitiesHeader .viewToggle .viewToggleItem:nth-child(2){
+ .viewToggle .viewToggleItem:nth-child(2){
   width: 48%;
   height: 100%;
   border-radius: 0 50px 50px 0;
@@ -1030,4 +1030,20 @@ main {
   flex-direction: column;
   gap: 1rem;
   overflow-y: scroll;
+}
+
+.eventCommHead{
+  width: 100%;
+  height: 40%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+
+}
+
+.globalRankingSection{
+  width: 100%;
+  height: 100%;
+  padding: 1rem 0;
 }
