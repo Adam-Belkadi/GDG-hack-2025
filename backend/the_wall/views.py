@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from .models import Notification, EventTag, UserInterestTags
+from .models import Notification, GlobalEventTag, UserInterestTags
 from .serializers import NotificationSerializer, GlobalEventSerializer
 
 
@@ -37,7 +37,7 @@ def create_global_event(request):
 def get_notifications_by_interest(request):
     user = request.user
     interested_tags = UserInterestTags.objects.filter(userId=user).values_list('tagId', flat=True)
-    event_ids = EventTag.objects.filter(tagId__in=interested_tags).values_list('eventId', flat=True)
+    event_ids = GlobalEventTag.objects.filter(tagId__in=interested_tags).values_list('eventId', flat=True)
 
     notifications = Notification.objects.filter(
         Q(user=user) |  # Personal notifications

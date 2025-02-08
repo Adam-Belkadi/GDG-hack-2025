@@ -20,7 +20,7 @@ class GlobalEvent(models.Model):
         return self.title
 
 
-class EventTag(models.Model):
+class GlobalEventTag(models.Model):
     eventId = models.ForeignKey(GlobalEvent, on_delete=models.CASCADE)
     tagId = models.ForeignKey(Tag, on_delete=models.CASCADE)
 
