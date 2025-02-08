@@ -328,7 +328,8 @@ main {
 .addPost {
   position: fixed;
   bottom: 0;
-  width: 100%;
+
+  width: 50%;
   height: 8vh;
   display: flex;
   justify-content: center;
@@ -348,7 +349,7 @@ main {
 }
 
 .sideBar {
-  width: 25vw;
+  width: 20vw;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -357,6 +358,7 @@ main {
   border: var(--border-light);
   box-shadow: var(--border-shadow-light);
   border-radius: 0 0 50px 0;
+  background-color: var(--white-color-100);
 }
 
 .sideBar_Image {
@@ -486,17 +488,16 @@ main {
 .eventItemInC{
   width: 80%;
   height: 40%;
+  min-height: 300px;
   border-radius: 16px;
   border: var(--border-light);
   box-shadow: var(--border-shadow-light);
+  box-sizing:content-box;
 }
 
 .eventItemInC .eventInfoInC{
   width: 100%;
   height: 85%;
-  background-image: url("/icons/bigcat.svg");
-  background-size: cover;
-  background-position: center;
   border-radius: 16px;
 
 }
@@ -521,6 +522,8 @@ main {
   justify-content: center;
   align-items: center;
   border-radius: 16px 16px 0 0;
+  border: var(--border-light);
+  box-shadow: var(--border-shadow-normal);
 }
 
 .eventItemInC .eventDescriptionInC p {
@@ -536,6 +539,7 @@ main {
   align-items: center;
   flex-direction: row;
   border-radius: 0 0 16px 16px;
+  background-color: var(--white-color-90);
 
 }
 
@@ -558,7 +562,7 @@ main {
 }
 
 
-.eventItemInC .star{
+ .star{
   color: var(--yellow-color);
 }
 
@@ -656,3 +660,157 @@ main {
   gap: 2rem;
 }
 
+
+.postsSection{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  flex-direction: row;
+}
+
+.postsContent{
+  height: 100%;
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+}
+
+.sectionButton{
+  background-color: var(--white-color-80);
+  width: 20%;
+  height: 90%;
+  margin: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: var(--border-shadow-normal);
+  border: var(--border-light);
+  border-radius: 50px;
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-bold);
+}
+
+.sectionButtonC{
+  background-color: var(--red-color);
+  color: var(--white-color-100);
+}
+
+.sectionButtonContainer{
+  margin: 1rem;
+  width: 100%;
+  height: 8%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: row;
+}
+
+.postItem{
+  background-color: var(--white-color-90);
+  width: 90%;
+  height: 40%;
+  border-radius: 16px;
+  border: var(--border-light);
+  box-shadow: var(--border-shadow-light);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+}
+
+.postItem .postHeader{
+  width: 100%;
+  height: 25%;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  flex-direction: row;
+  border-bottom: var(--border-light);
+}
+
+.postItem .postHeader img{
+  width: 10%;
+  height: 100%;
+  border-radius: 100%;
+  padding: 0.5rem 0rem;
+}
+
+.postItem .postHeader .postHeaderInfo{
+  height: 100%;
+  width: 20%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: start;
+  flex-direction: column;
+
+
+}
+
+.postItem .postHeader .postHeaderInfo h3{
+  font-size: var(--font-size-h3);
+
+}
+
+.postItem .postHeader .postHeaderInfo p{
+  font-size: var(--font-size-subText);
+}
+
+.postItem .postContent{
+  width: 90%;
+  height: 60%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  font-size: var(--font-size-normal);
+  font-weight: var(--font-weight-bold);
+
+}
+
+.postItem .postBottom{
+  width: 100%;
+  height: 15%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: row;
+  border-top: var(--border-light);
+}
+
+.postItem .postBottom button{
+  width: 30%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  border: none;
+  font-size: var(--font-size-h3);
+  cursor: pointer;
+}
+
+.postItem .postBottom button img{
+  width: 20%;
+  height: 75%;
+}*
+
+.report{
+  color: var(--red-color);
+}
+
+.postsContainer{
+  padding:  2rem 0;
+  width: 100%;
+  height: 80%;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  flex-direction: column;
+  overflow-y: scroll;
+  gap: 2rem;
+}
