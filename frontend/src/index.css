@@ -668,6 +668,7 @@ main {
   justify-content: start;
   align-items: center;
   flex-direction: row;
+  overflow: hidden;
 }
 
 .postsContent{
@@ -768,7 +769,7 @@ main {
   align-items: center;
   flex-direction: column;
   font-size: var(--font-size-normal);
-  font-weight: var(--font-weight-bold);
+  box-shadow: var(--border-shadow-light);
 
 }
 
@@ -806,11 +807,227 @@ main {
 .postsContainer{
   padding:  2rem 0;
   width: 100%;
-  height: 80%;
+  height: 90%;
   display: flex;
   justify-content: start;
   align-items: center;
   flex-direction: column;
   overflow-y: scroll;
   gap: 2rem;
+}
+
+
+.rankingDashboard{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  flex-direction: column;
+  gap: 1rem;
+
+}
+
+.rankingDashboard .personnalRank{
+  background-color: var(--blue-color);
+  width: 95%;
+  height: 30%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: row;
+  border-radius: 16px;
+  box-shadow: var(--border-shadow-light);
+}
+
+.rankingDashboard .personnalRank .rank{
+  width: 30%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: var(--yellow-color);
+}
+
+.rankingDashboard .personnalRank .rank h1{
+  font-size: var(--font-size-h1);
+}
+
+.rankingDashboard .personnalRank .rank p{
+  font-size: var(--font-size-p);
+}
+
+.rankingDashboard .personnalRank .point{
+  width: 30%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: var(--white-color-100);
+}
+
+.rankingDashboard .personnalRank .point h1{
+  font-size: var(--font-size-h1);
+}
+
+.rankingDashboard .personnalRank .point p{
+  font-size: var(--font-size-p);
+}
+
+.rankingDashboard .personnalRank .badges{
+  width: 40%;
+  height: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: row;
+}
+
+.rankingDashboard .personnalRank .badges img{
+  background-color: var(--white-color-80);
+  border-radius: 16px;
+  width: 20%;
+  height: 60%;
+}
+
+
+.postsContainer2{
+  padding:  2rem 0;
+  width: 100%;
+  height: 90%;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+
+.firstRank{
+  background-color: var(--white-color-90);
+  width: 30%;
+  height: 100%;
+  border-radius: 16px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: column;
+  box-shadow: var(--border-shadow-normal);
+  padding: 0.5rem;
+}
+
+.firstRank .rankInfo{
+  width: 100%;
+  height: 40%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: row;
+  border-bottom: var(--border-light);
+}
+
+.firstRank .rankBadges{
+  width: 100%;
+  height: 50%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: row;
+
+}
+
+.firstRank .rankBadges img{
+  width: 20%;
+  height: 60%;
+  border-radius: 20%;
+  background-color: var(--white-color-70);
+}
+
+.firstRank h4{
+  font-size: var(--font-size-p);
+  font-weight: var(--font-weight-light);
+  width: 100%;
+  text-align: center;
+  height: 10%;
+}
+
+.otherRank{
+  width: 100%;
+  height: 70%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: column;
+  gap: 1rem;
+
+}
+
+
+.rankClassment:nth-child(even){
+  width: 90%;
+  border-radius: 16px;
+  box-shadow: var(--border-shadow-normal);
+  background-color: var(--white-color-100);
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: row;
+  border: var(--border-light);
+}
+
+.rankClassment:nth-child(odd){
+  width: 90%;
+  border-radius: 16px;
+  box-shadow: var(--border-shadow-normal);
+  background-color: var(--white-color-80);
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: row;
+  border: var(--border-light);
+}
+
+.rankClassment h3{
+  font-size: var(--font-size-p);
+  font-weight: var(--font-weight-bold);
+
+}
+
+.rankClassment .userInfoRank{
+  width: 30%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+}
+
+.rankClassment .userInfoRank img{
+  width: 20%;
+  height: 80%;
+  border-radius: 100%;
+  margin-right: 0.5rem;
+}
+
+
+.otherRankPodium{
+  width: 100%;
+  height: 40%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: row;
+}
+
+.otherRankRankList{
+  width: 100%;
+  height: 60%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: column;
+  gap: 1rem;
+  overflow-y: scroll;
 }
