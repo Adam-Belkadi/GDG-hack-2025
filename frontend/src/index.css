@@ -1520,3 +1520,40 @@ main {
   font-size: 0.875rem;
   margin-top: 0.5rem;
 }
+
+.navbarmenu {
+  background-color: #333;
+  padding: 10px;
+  position: fixed;
+  top: 5vh;
+  right: 2vw;
+}
+
+.navbarmenu .menu {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+}
+
+.navbarmenu .menu li {
+  margin: 0 15px;
+}
+
+.navbarmenu .menu a {
+  color: white;
+  text-decoration: none;
+}
+
+.navbarmenu button {
+  margin-left: 20px;
+  padding: 5px 10px;
+  color: white;
+  background-color: #555;
+  border: none;
+  cursor: pointer;
+}
+
+.navbarmenu button:hover {
+  background-color: #444;
+}

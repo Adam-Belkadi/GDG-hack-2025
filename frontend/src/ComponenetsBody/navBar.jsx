@@ -2,6 +2,10 @@ import React, { useState } from "react";
 export default function NavBar() {
   const [authentificated, setAuthentificated] = useState(true);
 
+  function showMenu(){
+    
+  }
+
   return (
     <>
       <div className="navBar">
@@ -29,7 +33,7 @@ export default function NavBar() {
                 <img src="/icons/small cat.svg" alt="avatar" />
               </div>
               <div className="menu">
-                <div className="menu_container">
+                <div className="menu_container" on>
                   <img src="/icons/Menu.svg" alt="menu icons" />
                 </div>
               </div>
@@ -40,7 +44,7 @@ export default function NavBar() {
                 <button>Sign Up</button>
               </div>
               <div className="menu">
-                <div className="menu_container">
+                <div className="menu_container" onClick={showMenu}>
                   <img src="/icons/Menu.svg" alt="menu icons" />
                 </div>
               </div>
