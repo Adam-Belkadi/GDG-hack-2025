@@ -16,17 +16,17 @@ from .views import (
     star_post,
     star_event,
     delete_post,
-    delete_community, enroll_user_to_community,
+    delete_community, enroll_user_to_community, create_event,
 )
 
 urlpatterns = [
     # Get all communities
-    path('communities/', get_communities, name='get-communities'),
+    path('communities/', get_communities, name='get-communities'), #tested
 
-    path('community/enroll/<int:community_id>/', enroll_user_to_community, name='enroll_user'),
+    path('community/enroll/<int:community_id>/', enroll_user_to_community, name='enroll_user'), #tested
 
     # Get communities the user is enrolled in
-    path('communities/enrolled/', get_user_enrolled_communities, name='get-user-enrolled-communities'),
+    path('communities/enrolled/', get_user_enrolled_communities, name='get-user-enrolled-communities'), #tested
 
     # Get a single community by ID
     path('community/<int:community_id>/', get_community, name='get-community'),
@@ -38,10 +38,10 @@ urlpatterns = [
     path('community/<int:community_id>/tags/', get_community_tags, name='get-community-tags'),
 
     # Search communities by tag or name
-    path('communities/search/', search_communities, name='search-communities'),
+    path('communities/search/', search_communities, name='search-communities'), #tested
 
     # Get all tags
-    path('tags/', get_all_tags, name='get-all-tags'),
+    path('tags/', get_all_tags, name='get-all-tags'), #tested
 
     # Get all events of a community
     path('communities/<int:community_id>/events/', get_community_events, name='get-community-events'),
@@ -56,7 +56,7 @@ urlpatterns = [
     path('communities/<int:community_id>/posts/<int:post_id>/tags/', get_post_tags, name='get-post-tags'),
 
     # Create a community
-    path('communities/create/', create_community, name='create-community'),
+    path('communities/create/', create_community, name='create-community'), #tested
 
     # Create a post
     path('communities/<int:community_id>/posts/create/', create_post, name='create-post'),
@@ -72,4 +72,7 @@ urlpatterns = [
 
     # Delete post
     path('communities/<int:community_id>/posts/<int:post_id>/delete/', delete_post, name='delete-post'),
+
+    # Create event
+    path('events/create/', create_event, name='create_event'),
 ]

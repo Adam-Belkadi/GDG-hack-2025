@@ -325,3 +325,21 @@ def delete_post(request, community_id, post_id):
 
     post.delete()
     return Response({"message": "Post deleted successfully"}, status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def create_event(request):
+    user = request.user
+    data = request.data.copy()
+    try:
+        community = Community.objects.get(id=data.get('communityId'))
+    except Community.DoesNotExist:
+        return Response({"error": "Community not found"}, status=status.HTTP_404_NOT_FOUND)
+    data['organizerId'] = user.id
+    serializer = EventSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save(organizerId=user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
