@@ -126,9 +126,13 @@ export default function Communities() {
             { categoryName: "Mobile" },
             { categoryName: "Game" },
             { categoryName: "Design" },
-            { categoryName: "Mobile" },
-            { categoryName: "Game" },
+            { categoryName: "CS" },
+            { categoryName: "UI/UX" },
+            { categoryName: "Cloud" },
             { categoryName: "Design" },
+            { categoryName: "CS" },
+            { categoryName: "UI/UX" },
+            { categoryName: "Cloud" },
           ]}
         />
 
