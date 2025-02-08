@@ -1,9 +1,10 @@
 import { Outlet } from "react-router-dom";
+import NavBar from "./ComponenetsBody/navBar";
 
 export default function Body(){
     return (<>
         <div className="body">
-            <navBar></navBar>
+            <NavBar></NavBar>
             <main>
                 <Outlet />
             </main>
