@@ -12,6 +12,7 @@ import EventsInC from './pages/Communities/Events/Page';
 import RankingInC from './pages/Communities/Ranking/Page';
 import Ranking from './pages/Ranking/Page';
 import Communities from './pages/Communities/Page';
+import EventWall from "./EventWall";
 
 import Body from './Body';
 import './App.css';
